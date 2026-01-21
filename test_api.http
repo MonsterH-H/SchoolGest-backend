@@ -1,0 +1,250 @@
+### 1. Inscription (Register)
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "admin_test",
+  "password": "password123",
+  "email": "admin@school.com",
+  "role": "ADMIN"
+}
+
+### 2. Connexion (Login)
+# @name login
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin_test",
+  "password": "password123"
+}
+
+### Extraire le token (Variables pour REST Client)
+@authToken = {{login.response.body.token}}
+
+### 3. Récupérer tous les utilisateurs (Nécessite Token Admin)
+GET http://localhost:8080/api/users
+Authorization: Bearer {{authToken}}
+
+### 4. Mise à jour du profil (User Connecté)
+PUT http://localhost:8080/api/auth/profile
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "firstName": "Super",
+  "lastName": "Admin",
+  "phone": "+221770000000"
+}
+
+### 5. Mot de passe oublié
+POST http://localhost:8080/api/auth/forgot-password
+Content-Type: application/json
+
+{
+  "email": "admin@school.com"
+}
+
+### 6. Réinitialisation (Utiliser le token affiché dans la console)
+POST http://localhost:8080/api/auth/reset-password
+Content-Type: application/json
+
+{
+  "token": "REMPLACER_PAR_LE_TOKEN_CONSOLE",
+  "newPassword": "newpassword456"
+}
+
+### 7. Module Académique : Créer un établissement
+POST http://localhost:8080/api/structure/establishments
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "name": "Faculté des Sciences",
+  "code": "FST",
+  "academicYears": "2024-2025"
+}
+
+### 8. Module Académique : Créer un Module
+POST http://localhost:8080/api/structure/modules
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "name": "Informatique Fondamentale",
+  "credits": 15
+}
+
+### 9. Module Académique : Créer une Matière (UE)
+POST http://localhost:8080/api/structure/subjects
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "name": "Programmation Java",
+  "code": "JAVA101",
+  "hoursCM": 20,
+  "hoursTD": 10,
+  "hoursTP": 10,
+  "credits": 5,
+  "module": { "id": 1 }
+}
+
+### 10. Module Académique : Inscrire un etudiant
+POST http://localhost:8080/api/structure/enroll?studentId=1&classeId=1
+Authorization: Bearer {{authToken}}
+
+### 11. Module Évaluation : Créer un devoir
+POST http://localhost:8080/api/evaluations/assignments
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "title": "TP Java Fondamentaux",
+  "description": "Implémenter une liste chaînée",
+  "subject": { "id": 1 },
+  "teacher": { "id": 1 },
+  "deadline": "2024-12-31T23:59:59Z"
+}
+
+### 12. Module Évaluation : Saisir une note
+POST http://localhost:8080/api/evaluations/grades
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "student": { "id": 1 },
+  "subject": { "id": 1 },
+  "evaluationType": "DEVOIR",
+  "score": 16.5,
+  "weight": 1.0,
+  "feedback": "Très bon travail sur les pointeurs."
+}
+
+### 13. Module Évaluation : Calculer moyenne
+GET http://localhost:8080/api/evaluations/student/1/average?subjectId=1
+Authorization: Bearer {{authToken}}
+
+### 14. Module Planning : Créer une salle
+POST http://localhost:8080/api/emploidutemps/salles
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "nom": "Amphi A",
+  "capacite": 200,
+  "type": "AMPHI",
+  "projecteur": true
+}
+
+### 15. Module Planning : Créer un créneau
+POST http://localhost:8080/api/emploidutemps/creneaux
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "label": "Matin 1",
+  "startTime": "08:00:00",
+  "endTime": "10:00:00"
+}
+
+### 16. Module Planning : Planifier un cours
+POST http://localhost:8080/api/emploidutemps/plannings
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "subject": { "id": 1 },
+  "classe": { "id": 1 },
+  "teacher": { "id": 1 },
+  "room": { "id": 1 },
+  "timeSlot": { "id": 1 },
+  "date": "2024-12-24"
+}
+
+### 17. Module Planning : Voir emploi du temps classe
+GET http://localhost:8080/api/emploidutemps/classe/1?debut=2024-12-01&fin=2024-12-31
+Authorization: Bearer {{authToken}}
+
+### 18. Module Présences : Marquer un absent
+POST http://localhost:8080/api/presences/marquer?studentId=1&planningId=1&status=ABSENT
+Authorization: Bearer {{authToken}}
+
+### 19. Module Présences : Statistiques etudiant
+GET http://localhost:8080/api/presences/stats/etudiant/1
+Authorization: Bearer {{authToken}}
+
+### 20. Module Travaux : Créer un devoir pour une classe
+POST http://localhost:8080/api/travaux/devoirs
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "title": "Projet Spring Boot",
+  "description": "Créer une API de gestion scolaire",
+  "subject": { "id": 1 },
+  "teacher": { "id": 1 },
+  "classe": { "id": 1 },
+  "deadline": "2024-12-30T12:00:00"
+}
+
+### 21. Module Travaux : Dépôt de devoir par l'etudiant
+POST http://localhost:8080/api/travaux/devoirs/1/rendre?studentId=1
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "fileUrl": "http://storage.com/projet.zip",
+  "text": "Voici mon rendu pour le projet final."
+}
+
+### 22. Module Ressources : Partager un document
+POST http://localhost:8080/api/ressources
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "title": "Support de cours Java",
+  "description": "Introduction aux Streams API",
+  "type": "COURS_PDF",
+  "subject": { "id": 1 },
+  "teacher": { "id": 1 },
+  "classe": { "id": 1 },
+  "fileUrl": "http://cdn.school.com/java-streams.pdf"
+}
+
+### 23. Module Communications : Envoyer un message privé
+POST http://localhost:8080/api/communications/messages
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "sender": { "id": 1 },
+  "receiver": { "id": 2 },
+  "subject": "Question sur le TP",
+  "content": "Bonjour, j'ai une question concernant la deadline du projet."
+}
+
+### 24. Module Communications : Voir les notifications
+GET http://localhost:8080/api/communications/notifications/1
+Authorization: Bearer {{authToken}}
+
+### 25. Module Bulletins : Générer un bulletin
+POST http://localhost:8080/api/bulletins/generer
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "studentId": 1,
+  "semesterId": 1,
+  "academicYear": "2024-2025"
+}
+
+### 26. Module Admin : Voir les statistiques globales
+GET http://localhost:8080/api/admin/dashboard/stats
+Authorization: Bearer {{authToken}}
+
+### 27. Module Admin : Statut du système
+GET http://localhost:8080/api/admin/system/status
+Authorization: Bearer {{authToken}}
+
