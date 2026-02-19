@@ -1,128 +1,95 @@
-# 📔 GUIDE MAÎTRE - SchoolGest ERP (Complet)
+﻿# 📔 GUIDE MAITRE - SchoolGest ERP (Complet)
 
-Ce document est la source unique de vérité pour l'ensemble du projet **SchoolGest**. Il regroupe la vision, l'architecture, la sécurité, et les instructions de déploiement.
+Ce document est la source unique de verite pour l'ensemble du projet **SchoolGest**. Il regroupe la vision, l'architecture, la securite, et les instructions de deploiement.
 
 ---
 
 ## 🌟 1. Vision et Objectifs
-**SchoolGest** est un système de gestion scolaire (ERP) de nouvelle génération conçu pour automatiser les tâches administratives, pédagogiques et de communication.
-- **Zéro Papier** : Digitalisation complète des absences, notes et devoirs.
-- **Logistique Intelligente** : Moteur de détection de conflits pour l'emploi du temps.
-- **Réussite Académique** : Suivi analytique des performances et génération automatique de bulletins.
-- **Cloud-Native** : Stockage dématérialisé sur le cloud (Cloudinary).
+**SchoolGest** est un systeme de gestion scolaire (ERP) de nouvelle generation concu pour automatiser les taches administratives, pedagogiques et de communication.
+- **Zero Papier** : Digitalisation complete des absences, notes et devoirs.
+- **Logistique Intelligente** : Moteur de detection de conflits pour l'emploi du temps.
+- **Reussite Academique** : Suivi analytique des performances et generation automatique de bulletins.
+- **Cloud-Native** : Stockage dematerialise sur le cloud (Cloudinary).
 
 ---
 
-## 🛠️ 2. Stack Technologique Full-Option
-- **Framework** : Spring Boot 3.4.1 (Java 17+)
-- **Base de données** : PostgreSQL (Persistance relationnelle robuste)
-- **Sécurité** : 
-    - Spring Security
-    - JWT (JSON Web Tokens) pour l'authentification Stateless
-    - BCrypt pour le hachage des mots de passe
-- **Stockage Objets** : API Cloudinary (Images, PDF, Vidéos)
-- **Outils** : 
-    - Lombok (Réduction du code boilerplate)
-    - Jackson (Parsing JSON avancé)
-    - Maven (Gestion des dépendances)
+## 🛠️ 2. Stack Technologique
+- **Framework** : Spring Boot 3.4.1 (Java 23)
+- **Base de donnees** : PostgreSQL
+- **Securite** : Spring Security + JWT + BCrypt
+- **Stockage Objets** : Cloudinary
+- **Outils** : Lombok, Jackson, Maven
 
 ---
 
-## 📁 3. Architecture du Code (Détail des Dossiers)
-Le projet suit une organisation **Modulaire par Domaine** :
-
-- `entity/` : Modèles de données globaux (User, Student, Subject, etc.).
-- `repository/` : Interfaces d'accès à la base de données (Spring Data JPA).
-- `security/` : Configuration JWT, Filtres de sécurité et Custom User Details.
-- `exception/` : Gestionnaire d'erreurs centralisé (`GlobalExceptionHandler`).
-- **`gestions_...`** (Modules Métier) :
-    - `auth/` : Inscription, Login, Reset Password.
-    - `academique/` : Classes, Matières, Inscriptions, Bulletins.
-    - `emploidutemps/` : Planning, Salles, Créneaux.
-    - `presences/` : Appel, Justificatifs, Alertes d'absences.
-    - `travaux/` : Devoirs, Rendus, Corrections.
-    - `ressources/` : Supports de cours et **FileUpload Service Cloud**.
-    - `communications/` : Messagerie et Notifications.
-    - `admin/` : Dashboard et Statistiques.
+## 📁 3. Architecture du Code
+Organisation modulaire par domaine :
+- `entity/`, `repository/`, `security/`, `exception/`
+- **Modules metier** : `auth`, `academique`, `emploidutemps`, `presences`, `travaux`, `ressources`, `communications`, `admin`
 
 ---
 
-## 🛡️ 4. Système de Sécurité et Rôles (RBAC)
-Le projet gère 3 niveaux d'accès distincts :
+## 🛡️ 4. Securite et Roles (RBAC)
+- **ADMIN** : administration globale, validation finale
+- **ENSEIGNANT** : notes, presences, devoirs
+- **ETUDIANT** : consultation planning/notes, rendus
 
-1. **ADMIN** (Le Maître du Système) :
-   - Accès au Dashboard global.
-   - Création de la structure (Salles, Classes, Matières).
-   - Validation finale des bulletins et inscriptions.
-2. **ENSEIGNANT** (Le Pilote Pédagogique) :
-   - Saisie des notes et présence.
-   - Création de devoirs et partage de ressources.
-   - Correction des rendus.
-3. **ETUDIANT** (Le Bénéficiaire) :
-   - Consultation de son planning et ses notes.
-   - Rendu de devoirs et dépôt de justificatifs.
-   - Messagerie privée avec les enseignants.
+Details : `docs/SECURITY.md`
 
 ---
 
-## ☁️ 5. Intégration Cloud (Cloudinary)
-Le système n'enregistre aucun fichier localement. Tout passe par Cloudinary :
-- **Dossiers automatiques** : `/avatars`, `/devoirs`, `/cours`, `/justificatifs`.
-- **Performance** : Les fichiers sont servis via CDN pour une rapidité maximale.
+## ☁️ 5. Integration Cloud (Cloudinary)
+Aucun fichier n'est stocke localement. Les dossiers cibles sont :
+- `/avatars`, `/devoirs`, `/cours`, `/justificatifs`, `/messages`, `/soumissions`
 
 ---
 
-## 🚀 6. Installation et Déploiement (Pas à Pas)
+## 🚀 6. Installation et Deploiement
+Voir `SETUP_GUIDE.md` et `docs/DEPLOYMENT.md`.
 
-### Étape 1 : Base de données
-Créez une base PostgreSQL nommée `gestschool_db`.
-
-### Étape 2 : Configuration (`application.properties`)
-Remplissez les clés suivantes :
+Configuration (extrait) :
 ```properties
-# Cloudinary (Obligatoire)
-cloudinary.cloud_name=dqroutsjq
-cloudinary.api_key=733418768836493
-cloudinary.api_secret=RRnVOtL9QwmT7Xdrsl52jhVsAz0
+spring.datasource.url=jdbc:postgresql://localhost:5432/gestschool_db
+spring.datasource.username=${DB_USERNAME}
+spring.datasource.password=${DB_PASSWORD}
 
-# JWT (Générez une clé forte de 64 caractères)
-jwt.secret=votre_cle_secrete
-```
+jwt.secret=${JWT_SECRET}
 
-### Étape 3 : Lancement
-```bash
-mvn clean install
-mvn spring-boot:run
+cloudinary.cloud_name=${CLOUDINARY_CLOUD_NAME}
+cloudinary.api_key=${CLOUDINARY_API_KEY}
+cloudinary.api_secret=${CLOUDINARY_API_SECRET}
 ```
 
 ---
 
-## 📊 7. Catalogue des APIs Majeures (Résumé)
-- **Authentification** : `POST /api/auth/login`
-- **Profil** : `PUT /api/auth/profile` (Multipart pour photo)
-- **Planning** : `GET /api/emploidutemps/classe/{id}`
-- **Note** : `POST /api/evaluations/notes`
-- **Bulletin** : `POST /api/bulletins/generer`
-- **Devoir** : `POST /api/travaux/devoirs/{id}/rendre`
-- **Stats Admin** : `GET /api/admin/dashboard/stats`
+## 📊 7. Catalogue API (Resume)
+- `POST /api/auth/login`
+- `POST /api/auth/refresh`
+- `PUT /api/auth/profile`
+- `GET /api/emploidutemps/classe/{id}`
+- `POST /api/evaluations/notes`
+- `POST /api/bulletins/generer`
+- `POST /api/travaux/devoirs/{id}/rendre`
+- `GET /api/admin/dashboard/stats`
+
+Contrat complet : `docs/API_REFERENCE.md`
 
 ---
 
-## 📖 8. Glossaire Métier
-- **UE (Unité d'Enseignement)** : Un module regroupant plusieurs matières.
-- **EC (Élément Constitutif)** : Une matière individuelle.
-- **ECTS (Crédits)** : Valeur numérique de la charge de travail d'un module.
-- **Attendance Alert** : Système automatique notifiant l'etudiant à 1, 3, 5 et 10 absences.
-- **Audit Trail** : Historique complet des actions (Logs) pour la sécurité.
+## 📖 8. Glossaire Metier
+- **UE** : Unite d'Enseignement
+- **EC** : Element Constitutif
+- **ECTS** : Credits
+- **Audit Trail** : Historique des actions (logs)
 
 ---
 
-## 🛠️ 9. Maintenance et Évolution
-Le projet est conçu pour être **extensible**. Pour ajouter un nouveau module :
-1. Créez les entités dans `entity/`.
-2. Créez un package `gestions_nouveau/` avec Controller et Service.
-3. Injectez le `FileUploadService` si vous avez besoin de stocker des fichiers.
-4. Mettez à jour `SecurityConfig` pour les droits d'accès.
+## 🛠️ 9. Maintenance et Evolution
+Pour ajouter un module :
+1. Creer les entites dans `entity/`.
+2. Creer un package `gestions_nouveau/`.
+3. Injecter `FileUploadService` si besoin.
+4. Mettre a jour `SecurityConfig`.
 
 ---
-**Document rédigé le 23 Décembre 2025 - Fin de la phase de développement Backend.**
+**Document mis a jour le 19 fevrier 2026.**

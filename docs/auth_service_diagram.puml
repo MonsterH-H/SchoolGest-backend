@@ -1,0 +1,28 @@
+@startuml
+
+' Figure 5: Authentication Service
+left to right direction
+
+package "Authentication Service" {
+  [LoginController] --> [AuthService]
+  [AuthService] --> [UserRepository]
+  [AuthService] --> [JWTService]
+}
+
+note top of [LoginController]
+  Handles login requests
+end note
+
+note top of [AuthService]
+  Manages authentication logic
+end note
+
+note top of [UserRepository]
+  Accesses user data
+end note
+
+note top of [JWTService]
+  Generates and validates JWT tokens
+end note
+
+@enduml

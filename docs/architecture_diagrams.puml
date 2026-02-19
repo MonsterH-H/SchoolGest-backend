@@ -1,0 +1,24 @@
+@startuml
+
+' Figure 4: Back-end Architecture
+left to right direction
+
+package "Backend Architecture" {
+  [Controllers] --> [Services]
+  [Services] --> [Repositories]
+  [Repositories] --> [Database]
+}
+
+note top of [Controllers]
+  Handles HTTP requests and responses
+end note
+
+note top of [Services]
+  Business logic and processing
+end note
+
+note top of [Repositories]
+  Data access layer
+end note
+
+@enduml

@@ -1,0 +1,176 @@
+@startuml
+
+' Sequence Diagram for Admin
+actor Admin
+participant "Frontend" as FE
+participant "Backend" as BE
+participant "Database" as DB
+
+Admin -> FE: Login Request
+FE -> BE: Authenticate User
+BE -> DB: Validate Credentials
+DB --> BE: User Data
+BE --> FE: JWT Token
+FE --> Admin: Dashboard
+
+Admin -> FE: Manage Users Request
+FE -> BE: Fetch Users
+BE -> DB: Query Users
+DB --> BE: Users Data
+BE --> FE: Users List
+FE --> Admin: Display Users
+
+Admin -> FE: Update User Request
+FE -> BE: Update User
+BE -> DB: Save User
+DB --> BE: Confirmation
+BE --> FE: Success
+FE --> Admin: Confirmation
+
+Admin -> FE: Generate Reports Request
+FE -> BE: Request Report Data
+BE -> DB: Query Report Data
+DB --> BE: Report Data
+BE --> FE: Report Data
+FE --> Admin: Display Report
+
+Admin -> FE: Configure System Request
+FE -> BE: Update System Settings
+BE -> DB: Save Settings
+DB --> BE: Confirmation
+BE --> FE: Success
+FE --> Admin: Confirmation
+
+Admin -> FE: Manage Resources Request
+FE -> BE: Fetch Resources
+BE -> DB: Query Resources
+DB --> BE: Resources Data
+BE --> FE: Resources List
+FE --> Admin: Display Resources
+
+Admin -> FE: Monitor System Logs Request
+FE -> BE: Fetch System Logs
+BE -> DB: Query System Logs
+DB --> BE: System Logs Data
+BE --> FE: System Logs List
+FE --> Admin: Display System Logs
+
+@enduml
+
+@startuml
+
+' Sequence Diagram for Teacher
+actor Teacher
+participant "Frontend" as FE
+participant "Backend" as BE
+participant "Database" as DB
+
+Teacher -> FE: Login Request
+FE -> BE: Authenticate User
+BE -> DB: Validate Credentials
+DB --> BE: User Data
+BE --> FE: JWT Token
+FE --> Teacher: Dashboard
+
+Teacher -> FE: Record Attendance Request
+FE -> BE: Submit Attendance
+BE -> DB: Save Attendance
+DB --> BE: Confirmation
+BE --> FE: Success
+FE --> Teacher: Confirmation
+
+Teacher -> FE: Grade Assignment Request
+FE -> BE: Submit Grades
+BE -> DB: Save Grades
+DB --> BE: Confirmation
+BE --> FE: Success
+FE --> Teacher: Confirmation
+
+Teacher -> FE: Manage Courses Request
+FE -> BE: Fetch Courses
+BE -> DB: Query Courses
+DB --> BE: Courses Data
+BE --> FE: Courses List
+FE --> Teacher: Display Courses
+
+Teacher -> FE: Communicate with Students Request
+FE -> BE: Send Message
+BE -> DB: Save Message
+DB --> BE: Confirmation
+BE --> FE: Success
+FE --> Teacher: Confirmation
+
+Teacher -> FE: Manage Assignments Request
+FE -> BE: Fetch Assignments
+BE -> DB: Query Assignments
+DB --> BE: Assignments Data
+BE --> FE: Assignments List
+FE --> Teacher: Display Assignments
+
+Teacher -> FE: Generate Reports Request
+FE -> BE: Request Report Data
+BE -> DB: Query Report Data
+DB --> BE: Report Data
+BE --> FE: Report Data
+FE --> Teacher: Display Report
+
+@enduml
+
+@startuml
+
+' Sequence Diagram for Student
+actor Student
+participant "Frontend" as FE
+participant "Backend" as BE
+participant "Database" as DB
+
+Student -> FE: Login Request
+FE -> BE: Authenticate User
+BE -> DB: Validate Credentials
+DB --> BE: User Data
+BE --> FE: JWT Token
+FE --> Student: Dashboard
+
+Student -> FE: View Courses Request
+FE -> BE: Fetch Courses
+BE -> DB: Query Courses
+DB --> BE: Courses Data
+BE --> FE: Courses List
+FE --> Student: Display Courses
+
+Student -> FE: Submit Assignment Request
+FE -> BE: Submit Assignment
+BE -> DB: Save Assignment
+DB --> BE: Confirmation
+BE --> FE: Success
+FE --> Student: Confirmation
+
+Student -> FE: View Grades Request
+FE -> BE: Fetch Grades
+BE -> DB: Query Grades
+DB --> BE: Grades Data
+BE --> FE: Grades List
+FE --> Student: Display Grades
+
+Student -> FE: Communicate with Teachers Request
+FE -> BE: Send Message
+BE -> DB: Save Message
+DB --> BE: Confirmation
+BE --> FE: Success
+FE --> Student: Confirmation
+
+Student -> FE: Download Resources Request
+FE -> BE: Fetch Resources
+BE -> DB: Query Resources
+DB --> BE: Resources Data
+BE --> FE: Resources List
+FE --> Student: Display Resources
+
+Student -> FE: View Notifications Request
+FE -> BE: Fetch Notifications
+BE -> DB: Query Notifications
+DB --> BE: Notifications Data
+BE --> FE: Notifications List
+FE --> Student: Display Notifications
+
+@enduml

@@ -1,0 +1,38 @@
+@startuml
+
+' Figure 6: User Management Service
+left to right direction
+
+package "User Management Service" {
+  [UserController] --> [UserService]
+  [UserService] --> [UserRepository]
+  [UserService] --> [AdminRepository]
+  [UserService] --> [TeacherRepository]
+  [UserService] --> [StudentRepository]
+}
+
+note top of [UserController]
+  Handles user-related requests
+end note
+
+note top of [UserService]
+  Manages user operations
+end note
+
+note top of [UserRepository]
+  Accesses user data
+end note
+
+note top of [AdminRepository]
+  Accesses admin data
+end note
+
+note top of [TeacherRepository]
+  Accesses teacher data
+end note
+
+note top of [StudentRepository]
+  Accesses student data
+end note
+
+@enduml

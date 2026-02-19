@@ -1,0 +1,248 @@
+@startuml
+
+' Use Case Diagram for Admin
+left to right direction
+
+actor Admin
+
+package "Admin Use Cases" {
+  usecase "Manage Users" as UC1
+  usecase "Manage Classes" as UC2
+  usecase "Manage Departments" as UC3
+  usecase "Generate Reports" as UC4
+  usecase "Configure System" as UC5
+  usecase "Manage Resources" as UC6
+  usecase "Monitor System Logs" as UC7
+}
+
+Admin --> UC1
+Admin --> UC2
+Admin --> UC3
+Admin --> UC4
+Admin --> UC5
+Admin --> UC6
+Admin --> UC7
+
+note right of UC1
+  - Create, Update, Delete Users
+  - Assign Roles
+  - Reset Passwords
+  - View User Profiles
+  - Manage User Permissions
+end note
+
+note right of UC2
+  - Create, Update, Delete Classes
+  - Assign Teachers to Classes
+  - Manage Class Schedules
+  - View Class Details
+  - Assign Students to Classes
+end note
+
+note right of UC3
+  - Create, Update, Delete Departments
+  - Assign Heads of Department
+  - Manage Department Resources
+  - View Department Details
+  - Assign Courses to Departments
+end note
+
+note right of UC4
+  - Generate Academic Reports
+  - Generate Attendance Reports
+  - Export Data
+  - Generate Performance Reports
+  - Generate Financial Reports
+end note
+
+note right of UC5
+  - Configure System Settings
+  - Manage Permissions
+  - Update System Parameters
+  - Manage System Roles
+  - Configure Notifications
+end note
+
+note right of UC6
+  - Upload Resources
+  - Manage Resource Categories
+  - Share Resources
+  - View Resource Usage
+  - Manage Resource Access
+end note
+
+note right of UC7
+  - View System Logs
+  - Monitor User Activities
+  - Generate Audit Reports
+  - View Error Logs
+  - Manage Log Retention
+end note
+
+@enduml
+
+@startuml
+
+' Use Case Diagram for Teacher
+left to right direction
+
+actor Teacher
+
+package "Teacher Use Cases" {
+  usecase "Manage Courses" as UC6
+  usecase "Record Attendance" as UC7
+  usecase "Grade Assignments" as UC8
+  usecase "Communicate with Students" as UC9
+  usecase "View Schedule" as UC10
+  usecase "Manage Assignments" as UC11
+  usecase "Generate Reports" as UC12
+}
+
+Teacher --> UC6
+Teacher --> UC7
+Teacher --> UC8
+Teacher --> UC9
+Teacher --> UC10
+Teacher --> UC11
+Teacher --> UC12
+
+note right of UC6
+  - Create, Update, Delete Courses
+  - Assign Course Materials
+  - Manage Course Schedule
+  - View Course Details
+  - Assign Teachers to Courses
+end note
+
+note right of UC7
+  - Mark Attendance
+  - View Attendance Records
+  - Generate Attendance Reports
+  - Edit Attendance Records
+  - Export Attendance Data
+end note
+
+note right of UC8
+  - Grade Student Assignments
+  - Provide Feedback
+  - Update Grades
+  - View Grading History
+  - Export Grades
+end note
+
+note right of UC9
+  - Send Messages to Students
+  - Receive Messages from Students
+  - Manage Communication Logs
+  - View Message History
+  - Archive Messages
+end note
+
+note right of UC10
+  - View Personal Schedule
+  - Manage Time Slots
+  - Sync with Calendar
+  - Set Reminders
+  - Export Schedule
+end note
+
+note right of UC11
+  - Create Assignments
+  - Set Deadlines
+  - Review Submissions
+  - Provide Feedback
+  - Manage Assignment Status
+end note
+
+note right of UC12
+  - Generate Grade Reports
+  - Export Student Data
+  - Analyze Performance
+  - View Performance Trends
+  - Generate Custom Reports
+end note
+
+@enduml
+
+@startuml
+
+' Use Case Diagram for Student
+left to right direction
+
+actor Student
+
+package "Student Use Cases" {
+  usecase "View Courses" as UC11
+  usecase "Submit Assignments" as UC12
+  usecase "View Grades" as UC13
+  usecase "Communicate with Teachers" as UC14
+  usecase "View Schedule" as UC15
+  usecase "Download Resources" as UC16
+  usecase "View Notifications" as UC17
+}
+
+Student --> UC11
+Student --> UC12
+Student --> UC13
+Student --> UC14
+Student --> UC15
+Student --> UC16
+Student --> UC17
+
+note right of UC11
+  - View Enrolled Courses
+  - Access Course Materials
+  - Check Course Schedule
+  - View Course Details
+  - Download Course Syllabus
+end note
+
+note right of UC12
+  - Submit Assignments
+  - View Submission Status
+  - Resubmit Assignments
+  - View Assignment Feedback
+  - Download Assignment Files
+end note
+
+note right of UC13
+  - View Grades
+  - Check Performance
+  - Download Grade Reports
+  - View Grade History
+  - Analyze Performance Trends
+end note
+
+note right of UC14
+  - Send Messages to Teachers
+  - Receive Messages from Teachers
+  - Manage Communication Logs
+  - View Message History
+  - Archive Messages
+end note
+
+note right of UC15
+  - View Personal Schedule
+  - Sync with Calendar
+  - Set Reminders
+  - View Schedule Conflicts
+  - Export Schedule
+end note
+
+note right of UC16
+  - Download Course Resources
+  - Access Shared Materials
+  - Manage Downloads
+  - View Resource Details
+  - Organize Resources
+end note
+
+note right of UC17
+  - View Notifications
+  - Mark as Read
+  - Manage Notification Settings
+  - View Notification History
+  - Configure Notification Preferences
+end note
+
+@enduml

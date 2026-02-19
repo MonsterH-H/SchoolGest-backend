@@ -1,0 +1,375 @@
+@startuml SchoolGestApp_Database_Schema
+
+' Configuration pour un rendu propre
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam defaultFontSize 12
+
+' Définition des entités principales
+entity User {
+  + id [PK]
+  --
+  username
+  email
+  password
+  role
+  firstName
+  lastName
+  phone
+  active
+  createdAt
+  lastLogin
+  avatarUrl
+  address
+}
+
+entity Student {
+  + id [PK]
+  --
+  studentCode
+  birthDate
+  gender
+  nationality
+  status
+  bio
+  registrationDate
+}
+
+entity Teacher {
+  + id [PK]
+  --
+  teacherCode
+  hireDate
+  specialties
+  proPhone
+  office
+  cvUrl
+}
+
+entity Admin {
+  + id [PK]
+  --
+  name
+  address
+  phone
+  admin_poste
+}
+
+entity Establishment {
+  + id [PK]
+  --
+  name
+  code
+  address
+  phone
+  email
+  website
+  logoUrl
+  academicParameters
+  academicYears
+}
+
+entity Department {
+  + id [PK]
+  --
+  name
+  code
+  description
+}
+
+entity Classe {
+  + id [PK]
+  --
+  name
+  code
+  academicYear
+  maxCapacity
+  type
+}
+
+entity Subject {
+  + id [PK]
+  --
+  code
+  name
+  hoursCM
+  hoursTD
+  hoursTP
+  credits
+  coefficientCC
+  coefficientExam
+  description
+  prerequisite
+}
+
+entity Module {
+  + id [PK]
+  --
+  name
+  credits
+}
+
+entity Semester {
+  + id [PK]
+  --
+  name
+  academicYear
+  startDate
+  endDate
+  examStartDate
+  examEndDate
+  vacationStartDate
+  vacationEndDate
+  active
+}
+
+entity Enrollment {
+  + id [PK]
+  --
+  academicYear
+  status
+  finalGrade
+  enrollmentDate
+}
+
+entity Grade {
+  + id [PK]
+  --
+  evaluationType
+  score
+  maxScore
+  weight
+  feedback
+  status
+  createdAt
+  publishedAt
+  referenceId
+}
+
+entity Exam {
+  + id [PK]
+  --
+  name
+  examDate
+  examType
+  coefficient
+  room
+  durationMinutes
+  instructions
+}
+
+entity Attendance {
+  + id [PK]
+  --
+  status
+  arrivalTime
+  notes
+  justificationStatus
+  justificationReason
+  justificationFileUrl
+  validatedAt
+  createdAt
+}
+
+entity Planning {
+  + id [PK]
+  --
+  date
+  courseType
+  cancelled
+  cancellationReason
+  rescheduled
+  originalPlanningId
+  createdAt
+}
+
+entity TimeSlot {
+  + id [PK]
+  --
+  label
+  startTime
+  endTime
+  isPause
+  active
+}
+
+entity Salle {
+  + id [PK]
+  --
+  nom
+  capacite
+  type
+  projecteur
+  ordinateurs
+  actif
+}
+
+entity Assignment {
+  + id [PK]
+  --
+  title
+  description
+  deadline
+  maxNote
+  attachedFileUrl
+  solutionFileUrl
+  published
+  createdAt
+}
+
+entity Submission {
+  + id [PK]
+  --
+  submittedFileUrl
+  submissionText
+  submissionDate
+  grade
+  feedback
+  late
+  createdAt
+}
+
+entity Resource {
+  + id [PK]
+  --
+  title
+  description
+  type
+  fileUrl
+  published
+  version
+  uploadDate
+}
+
+entity CahierDeTexte {
+  + id [PK]
+  --
+  title
+  content
+  date
+  createdAt
+}
+
+entity ModuleResult {
+  + id [PK]
+  --
+  finalGrade
+  status
+  creditsObtained
+  validationDate
+}
+
+entity SubjectResult {
+  + id [PK]
+  --
+  finalGrade
+  status
+  creditsObtained
+  validationDate
+}
+
+entity ReportCard {
+  + id [PK]
+  --
+  academicYear
+  semester
+  average
+  rank
+  totalCredits
+  status
+  generatedAt
+  pdfUrl
+}
+
+' Relations entre les entités
+User ||--o{ Student : "1:1"
+User ||--o{ Teacher : "1:1"
+User ||--o{ Admin : "1:1"
+
+Establishment ||--o{ Department : "1:N"
+Department ||--o{ Classe : "1:N"
+Department ||--o{ Teacher : "1:N"
+
+Classe ||--o{ Student : "1:N"
+Classe ||--o{ Module : "1:N"
+Classe ||--o{ Planning : "1:N"
+Classe ||--o{ Assignment : "1:N"
+Classe ||--o{ Resource : "1:N"
+
+Module ||--o{ Subject : "1:N"
+Subject ||--o{ Teacher : "1:N"
+Subject ||--o{ Semester : "1:N"
+Subject ||--o{ Grade : "1:N"
+Subject ||--o{ Exam : "1:N"
+Subject ||--o{ Assignment : "1:N"
+Subject ||--o{ Resource : "1:N"
+Subject ||--o{ Planning : "1:N"
+
+Teacher ||--o{ Assignment : "1:N"
+Teacher ||--o{ Resource : "1:N"
+Teacher ||--o{ Planning : "1:N"
+Teacher ||--o{ Grade : "1:N"
+
+Student ||--o{ Enrollment : "1:N"
+Student ||--o{ Grade : "1:N"
+Student ||--o{ Attendance : "1:N"
+Student ||--o{ Submission : "1:N"
+
+Enrollment ||--o{ Classe : "N:1"
+Enrollment ||--o{ Student : "N:1"
+
+Grade ||--o{ Student : "N:1"
+Grade ||--o{ Subject : "N:1"
+Grade ||--o{ Teacher : "N:1"
+
+Exam ||--o{ Subject : "N:1"
+
+Attendance ||--o{ Student : "N:1"
+Attendance ||--o{ Planning : "N:1"
+Attendance ||--o{ User : "N:1"
+
+Planning ||--o{ Subject : "N:1"
+Planning ||--o{ Classe : "N:1"
+Planning ||--o{ Teacher : "N:1"
+Planning ||--o{ TimeSlot : "N:1"
+Planning ||--o{ Salle : "N:1"
+
+Assignment ||--o{ Submission : "1:N"
+Assignment ||--o{ Subject : "N:1"
+Assignment ||--o{ Teacher : "N:1"
+Assignment ||--o{ Classe : "N:1"
+
+Submission ||--o{ Assignment : "N:1"
+Submission ||--o{ Student : "N:1"
+
+Resource ||--o{ Subject : "N:1"
+Resource ||--o{ Teacher : "N:1"
+Resource ||--o{ Classe : "N:1"
+
+ModuleResult ||--o{ Module : "N:1"
+ModuleResult ||--o{ Student : "N:1"
+
+SubjectResult ||--o{ Subject : "N:1"
+SubjectResult ||--o{ Student : "N:1"
+
+ReportCard ||--o{ Student : "N:1"
+ReportCard ||--o{ Classe : "N:1"
+
+' Notes pour clarifier certaines relations
+note top of User
+  L'entité User est centrale et est étendue
+  par Student, Teacher et Admin via une relation 1:1.
+end note
+
+note right of Enrollment
+  Enrollment permet de gérer l'historique
+  académique d'un étudiant dans une classe.
+end note
+
+note left of Grade
+  Grade représente une note individuelle
+  pour un étudiant dans une matière.
+end note
+
+@enduml

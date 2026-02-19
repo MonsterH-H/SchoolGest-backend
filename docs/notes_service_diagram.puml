@@ -1,0 +1,33 @@
+@startuml
+
+' Figure 7: Notes Management Service
+left to right direction
+
+package "Notes Management Service" {
+  [EvaluationController] --> [EvaluationService]
+  [EvaluationService] --> [GradeRepository]
+  [EvaluationService] --> [ExamRepository]
+  [EvaluationService] --> [ModuleResultRepository]
+}
+
+note top of [EvaluationController]
+  Handles evaluation requests
+end note
+
+note top of [EvaluationService]
+  Manages evaluation operations
+end note
+
+note top of [GradeRepository]
+  Accesses grade data
+end note
+
+note top of [ExamRepository]
+  Accesses exam data
+end note
+
+note top of [ModuleResultRepository]
+  Accesses module result data
+end note
+
+@enduml
