@@ -27,6 +27,7 @@ public class UserResponseDTO {
     private Role role;
     private boolean active;
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
     private LocalDateTime lastLogin;
     private Object academicDetails;
 }

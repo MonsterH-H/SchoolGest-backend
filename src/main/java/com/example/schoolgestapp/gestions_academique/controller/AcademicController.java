@@ -1,9 +1,13 @@
 package com.example.schoolgestapp.gestions_academique.controller;
 
 import com.example.schoolgestapp.entity.*;
+import com.example.schoolgestapp.common.dto.PagedResponse;
 import com.example.schoolgestapp.gestions_academique.dto.*;
 import com.example.schoolgestapp.gestions_academique.services.AcademicService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +36,15 @@ public class AcademicController {
         return ResponseEntity.ok(academicService.getAllEstablishments());
     }
 
+    @GetMapping("/establishments/paged")
+    public ResponseEntity<PagedResponse<EstablishmentDTO>> getEstablishmentsPaged(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "desc") String direction) {
+        return ResponseEntity.ok(PagedResponse.from(academicService.getEstablishments(buildPageable(page, size, sortBy, direction))));
+    }
+
     @PutMapping("/establishments/{id}")
     public ResponseEntity<EstablishmentDTO> updateEstablishment(@PathVariable Long id, @RequestBody Establishment e) {
         return ResponseEntity.ok(academicService.updateEstablishment(id, e));
@@ -52,6 +65,15 @@ public class AcademicController {
     @GetMapping("/modules")
     public ResponseEntity<List<ModuleDTO>> getModules() {
         return ResponseEntity.ok(academicService.getAllModules());
+    }
+
+    @GetMapping("/modules/paged")
+    public ResponseEntity<PagedResponse<ModuleDTO>> getModulesPaged(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "desc") String direction) {
+        return ResponseEntity.ok(PagedResponse.from(academicService.getModules(buildPageable(page, size, sortBy, direction))));
     }
 
     @GetMapping("/classes/{id}/modules")
@@ -79,6 +101,15 @@ public class AcademicController {
     @GetMapping("/subjects")
     public ResponseEntity<List<SubjectDTO>> getSubjects() {
         return ResponseEntity.ok(academicService.getAllSubjects());
+    }
+
+    @GetMapping("/subjects/paged")
+    public ResponseEntity<PagedResponse<SubjectDTO>> getSubjectsPaged(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "desc") String direction) {
+        return ResponseEntity.ok(PagedResponse.from(academicService.getSubjects(buildPageable(page, size, sortBy, direction))));
     }
 
     @GetMapping("/classes/{id}/subjects")
@@ -123,6 +154,15 @@ public class AcademicController {
         return ResponseEntity.ok(academicService.getAllClasses());
     }
 
+    @GetMapping("/classes/paged")
+    public ResponseEntity<PagedResponse<ClasseDTO>> getClassesPaged(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "desc") String direction) {
+        return ResponseEntity.ok(PagedResponse.from(academicService.getClasses(buildPageable(page, size, sortBy, direction))));
+    }
+
     @PutMapping("/classes/{id}")
     public ResponseEntity<ClasseDTO> updateClasse(@PathVariable Long id, @RequestBody Classe c) {
         return ResponseEntity.ok(academicService.updateClasse(id, c));
@@ -155,6 +195,15 @@ public class AcademicController {
         return ResponseEntity.ok(academicService.getAllSemesters());
     }
 
+    @GetMapping("/semesters/paged")
+    public ResponseEntity<PagedResponse<Semester>> getSemestersPaged(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "desc") String direction) {
+        return ResponseEntity.ok(PagedResponse.from(academicService.getSemesters(buildPageable(page, size, sortBy, direction))));
+    }
+
     @PutMapping("/semesters/{id}")
     public ResponseEntity<Semester> updateSemester(@PathVariable Long id, @RequestBody Semester s) {
         return ResponseEntity.ok(academicService.updateSemester(id, s));
@@ -176,5 +225,13 @@ public class AcademicController {
     public ResponseEntity<Void> unenroll(@RequestParam Long studentId, @RequestParam Long classeId) {
         academicService.unenrollStudent(studentId, classeId);
         return ResponseEntity.noContent().build();
+    }
+
+    private Pageable buildPageable(int page, int size, String sortBy, String direction) {
+        int safeSize = Math.min(Math.max(size, 1), 100);
+        Sort sort = "asc".equalsIgnoreCase(direction)
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+        return PageRequest.of(Math.max(page, 0), safeSize, sort);
     }
 }

@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -39,7 +40,10 @@ public class User {
     private boolean active = true;
 
     @CreationTimestamp
+    @Column(updatable = false)
     private LocalDateTime createdAt;
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
     private LocalDateTime lastLogin;
     private String avatarUrl;
     private String address;
@@ -65,8 +69,4 @@ public class User {
     @JsonIgnore
     private LocalDateTime resetTokenExpiry;
 
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now();
-    }
 }

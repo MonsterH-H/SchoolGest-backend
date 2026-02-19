@@ -5,6 +5,8 @@ import com.example.schoolgestapp.entity.enums.StudentStatus;
 import com.example.schoolgestapp.gestions_academique.dto.*;
 import com.example.schoolgestapp.exception.BusinessException;
 import com.example.schoolgestapp.repository.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -84,6 +86,10 @@ public class AcademicService {
         return establishmentRepository.findAll().stream().map(this::toEstablishmentDTO).collect(Collectors.toList()); 
     }
 
+    public Page<EstablishmentDTO> getEstablishments(Pageable pageable) {
+        return establishmentRepository.findAll(pageable).map(this::toEstablishmentDTO);
+    }
+
     /** Gère les Modules (UE) qui regroupent plusieurs matières. */
     public ModuleDTO saveModule(com.example.schoolgestapp.entity.Module m) { 
         return toModuleDTO(moduleRepository.save(m)); 
@@ -91,6 +97,10 @@ public class AcademicService {
     
     public List<ModuleDTO> getAllModules() { 
         return moduleRepository.findAll().stream().map(this::toModuleDTO).collect(Collectors.toList()); 
+    }
+
+    public Page<ModuleDTO> getModules(Pageable pageable) {
+        return moduleRepository.findAll(pageable).map(this::toModuleDTO);
     }
 
     public List<ModuleDTO> getModulesByClasse(Long classeId) {
@@ -132,6 +142,10 @@ public class AcademicService {
     
     public List<SubjectDTO> getAllSubjects() { 
         return subjectRepository.findAll().stream().map(this::toSubjectDTO).collect(Collectors.toList()); 
+    }
+
+    public Page<SubjectDTO> getSubjects(Pageable pageable) {
+        return subjectRepository.findAll(pageable).map(this::toSubjectDTO);
     }
 
     public List<SubjectDTO> getSubjectsByClasse(Long classeId) {
@@ -200,6 +214,10 @@ public class AcademicService {
         return classeRepository.findAll().stream().map(this::toClasseDTO).collect(Collectors.toList()); 
     }
 
+    public Page<ClasseDTO> getClasses(Pageable pageable) {
+        return classeRepository.findAll(pageable).map(this::toClasseDTO);
+    }
+
     public ClasseDTO updateClasse(Long id, Classe updated) {
         Classe existing = classeRepository.findById(id)
                 .orElseThrow(() -> new BusinessException("Classe introuvable"));
@@ -226,6 +244,10 @@ public class AcademicService {
     
     public List<Semester> getAllSemesters() {
         return semesterRepository.findAll();
+    }
+
+    public Page<Semester> getSemesters(Pageable pageable) {
+        return semesterRepository.findAll(pageable);
     }
 
     public Semester updateSemester(Long id, Semester updated) {
